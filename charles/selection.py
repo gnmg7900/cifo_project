@@ -12,23 +12,24 @@ def fps(population):
         Individual: selected individual.
     """
 
-    if population.optim == "max":
+    if population.optim == "min":
         # Sum total fitness
-        total_fitness = sum([i.fitness for i in population])
+        total_fitness = sum([(1/i.fitness) for i in population])
         # Get a 'position' on the wheel
         spin = uniform(0, total_fitness)
         position = 0
         # Find individual in the position of the spin
         for individual in population:
-            position += individual.fitness
+            position += (1/individual.fitness)
             if position > spin:
                 return individual
 
-    elif population.optim == "min":
+    elif population.optim == "max":
         raise NotImplementedError
 
     else:
-        raise Exception("No optimization specified (min or max).")
+        raise Exception("No optimization specified (min).")
+
 
 
 def tournament(population, size=20):
@@ -45,10 +46,13 @@ def tournament(population, size=20):
     # Select individuals based on tournament size
     tournament = sample(population.individuals, size)
     # Check if the problem is max or min
-    if population.optim == 'max':
-        return max(tournament, key=attrgetter("fitness"))
-    elif population.optim == 'min':
+    if population.optim == 'min':
         return min(tournament, key=attrgetter("fitness"))
-    else:
-        raise Exception("No optimization specified (min or max).")
 
+    elif population.optim == "max":
+        raise NotImplementedError
+
+    else:
+        raise Exception("No optimization specified (min).")
+
+# Falta escrever o ranking

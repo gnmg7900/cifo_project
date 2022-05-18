@@ -1,6 +1,7 @@
-from random import shuffle, choice, sample, random
+from random import shuffle, choice, sample
 from operator import attrgetter
-
+from copy import deepcopy
+import random as rand
 
 class Individual:
     def __init__(
@@ -12,7 +13,7 @@ class Individual:
     ):
         if representation is None:
             if replacement == True:
-                self.representation = [choice(valid_set) for i in range(size)]
+                self.representation = [round(rand.uniform(valid_set[0], valid_set[1]),6) for i in range(size)]
             elif replacement == False:
                 self.representation = sample(valid_set, size)
         else:
@@ -22,8 +23,8 @@ class Individual:
     def get_fitness(self):
         raise Exception("You need to monkey patch the fitness path.")
 
-    def get_neighbours(self, func, **kwargs):
-        raise Exception("You need to monkey patch the neighbourhood function.")
+    def index(self, value):
+        return self.representation.index(value)
 
     def __len__(self):
         return len(self.representation)
@@ -56,28 +57,43 @@ class Population:
         for gen in range(gens):
             new_pop = []
 
+            if elitism == True:
+                if self.optim == "max":
+                    elite = deepcopy(max(self.individuals, key=attrgetter("fitness")))
+                elif self.optim == "min":
+                    elite = deepcopy(min(self.individuals, key=attrgetter("fitness")))
+
             while len(new_pop) < self.size:
                 parent1, parent2 = select(self), select(self)
                 # Crossover
-                if random() < co_p:
+                if rand.random() < co_p:
                     offspring1, offspring2 = crossover(parent1, parent2)
                 else:
                     offspring1, offspring2 = parent1, parent2
                 # Mutation
-                if random() < mu_p:
+                if rand.random() < mu_p:
                     offspring1 = mutate(offspring1)
-                if random() < mu_p:
+                if rand.random() < mu_p:
                     offspring2 = mutate(offspring2)
 
                 new_pop.append(Individual(representation=offspring1))
                 if len(new_pop) < self.size:
                     new_pop.append(Individual(representation=offspring2))
 
-            if elitism:
-                raise NotImplementedError
+            if elitism == True:
+                if self.optim == "max":
+                    least = min(new_pop, key=attrgetter("fitness"))
+                elif self.optim == "min":
+                    least = max(new_pop, key=attrgetter("fitness"))
+                new_pop.pop(new_pop.index(least))
+                new_pop.append(elite)
 
             self.individuals = new_pop
-            print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
+
+            if self.optim == "max":
+                print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
+            elif self.optim == "min":
+                print(f'Best Individual: {min(self, key=attrgetter("fitness"))}')
 
     def __len__(self):
         return len(self.individuals)
@@ -87,3 +103,4 @@ class Population:
 
     def __repr__(self):
         return f"Population(size={len(self.individuals)}, individual_size={len(self.individuals[0])})"
+
