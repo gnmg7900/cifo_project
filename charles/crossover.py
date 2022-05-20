@@ -1,5 +1,5 @@
 from random import randint, uniform, sample
-
+import random as rand
 
 def single_point_co(p1, p2):
     """Implementation of single point crossover.
@@ -98,9 +98,33 @@ def pmx_co(p1, p2):
     o2 = pmx(o2, p2)
     return o1, o2
 
+# Arithmetic crossover operator linearly combines the two parent chromosomes
+
+def arithmetic_co(p1, p2):
+    """Implementation of arithmetic crossover.
+
+    Args:
+        p1 (Individual): First parent for crossover.
+        p2 (Individual): Second parent for crossover.
+
+    Returns:
+        Individuals: Two offspring, resulting from the crossover.
+    """
+    # Offspring placeholders - None values make it easy to debug for errors
+    offspring1 = [None] * len(p1)
+    offspring2 = [None] * len(p1)
+    # Set a value for alpha between 0 and 1
+    alpha = uniform(0, 1)
+    # Take weighted sum of two parents, invert alpha for second offspring
+    for i in range(len(p1)):
+        offspring1[i] = p1[i] * alpha + (1 - alpha) * p2[i]
+        offspring2[i] = p2[i] * alpha + (1 - alpha) * p1[i]
+
+    return offspring1, offspring2
+
 
 if __name__ == '__main__':
-    p1, p2 = [9, 8, 4, 5, 6, 7, 1, 3, 2, 10], [8, 7, 1, 2, 3, 10, 9, 5, 4, 6]
+    p1, p2 = [0.07, 0.07, 0.08, 0.08, 0.01, 0.07, 0.05, 0.02, 0.08, 0.01], [0.02, 0.08, 0.07, 0.09, 0.08, 0.1, 0.05, 0.03, 0.1, 0.01]
     #p1, p2 = [1, 2, 3, 4, 5, 6, 7, 8, 9], [9, 3, 7, 8, 2, 6, 5, 1, 4]
     #p1, p2 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], [0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3]
-    o1, o2 = pmx_co(p1, p2)
+    o1, o2 = arithmetic_co(p1, p2)

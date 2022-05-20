@@ -1,4 +1,5 @@
 from random import randint, sample
+import random as rand
 
 
 def swap_mutation(individual):
@@ -51,13 +52,12 @@ def insertion_mutation(individual):
 
     return individual
 
-# Abaixo serve para testar se o código definido acima está bem implementado.
+# box mutation??
 
 if __name__ == '__main__':
-    test = [6, 1, 3, 5, 2, 4, 7]
-    #test = inversion_mutation(test)
+    test = [0.02, 0.08, 0.07, 0.09, 0.08, 0.1, 0.05, 0.03, 0.1, 0.01]
     test = insertion_mutation(test)
-    print(test)
+
 
 
 

@@ -13,7 +13,7 @@ class Individual:
     ):
         if representation is None:
             if replacement == True:
-                self.representation = [round(rand.uniform(valid_set[0], valid_set[1]),6) for i in range(size)]
+                self.representation = [choice(valid_set) for i in range(size)]
             elif replacement == False:
                 self.representation = sample(valid_set, size)
         else:

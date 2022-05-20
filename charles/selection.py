@@ -1,5 +1,6 @@
 from random import uniform, sample
 from operator import attrgetter
+import numpy as np
 
 
 def fps(population):
@@ -56,3 +57,51 @@ def tournament(population, size=20):
         raise Exception("No optimization specified (min).")
 
 # Falta escrever o ranking
+
+def ranking(population, size = 10):
+    """ Ranking selection Implementation
+
+    Args:
+        population (Population): The population we want to select from.
+        size(int): size of the population
+
+    Returns:
+        Individual: selected individual.
+    """
+    if population.optim == "min":
+        # sorting the fitnesses
+        sorted_fitnesses = [i.fitness for i in population].sort(reverse = True)
+        # Total fitness for the ranking algorithm
+        total_fitness = (size + 1) * size / 2
+
+
+        incrementer = (total_fitness / size) / total_fitness
+        ranking_scores = []
+
+        while incrementer <= 1:
+            ranking_scores.append(incrementer)
+            incrementer += (total_fitness / size) / total_fitness
+
+        ranking_scores = np.round(ranking_scores, 2).tolist()
+
+
+        spin = uniform(0, sum(ranking_scores))
+        position = 0
+        # Find individual in the position of the spin
+        for index, rank in enumerate(ranking_scores):
+            position += rank
+            if position > spin:
+                return population[index]
+
+    elif population.optim == "max":
+        raise NotImplementedError
+
+    else:
+        raise Exception("No optimization specified (min).")
+
+
+
+
+
+
+
