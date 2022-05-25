@@ -2,8 +2,8 @@ from charles.charles import Population, Individual
 from data.data import inputs,target
 from copy import deepcopy
 from charles.selection import fps, tournament, ranking
-from charles.mutation import swap_mutation, inversion_mutation
-from charles.crossover import single_point_co,cycle_co, pmx_co
+from charles.mutation import swap_mutation, inversion_mutation, insertion_mutation
+from charles.crossover import single_point_co,cycle_co, pmx_co, arithmetic_co
 
 import random as rand
 import numpy as np
@@ -37,25 +37,34 @@ def get_fitness(self):
 # Monkey patching
 Individual.get_fitness = get_fitness
 
+# statistical testing (5 runs)
+for i in range(5):
+
+    pop = Population(
+        size=100,
+        sol_size=(len(inputs[0])+1),
+        valid_set = np.round(np.arange(0, 0.1, 0.001).tolist(), 3),
+        replacement=True,
+        optim="min",
+    )
 
 
-pop = Population(
-    size=100,
-    sol_size=(len(inputs[0])+1),
-    valid_set = np.round(np.arange(0, 0.1, 0.001).tolist(), 3),
-    replacement=True,
-    optim="min",
-)
+    pop.evolve(
+        gens=100,
+        select=ranking,
+        crossover=arithmetic_co,
+        mutate=swap_mutation,
+        co_p=0.8,
+        mu_p=0.2,
+        elitism=True
+    )
 
+    #fitnesses=[]
+    #[fitnesses.append(pop.fitness_list[i].fitness) for i in range(100)]
 
-pop.evolve(
-    gens=1,
-    select=ranking,
-    crossover=single_point_co,
-    mutate=swap_mutation,
-    co_p=0.8,
-    mu_p=0.2,
-    elitism=True
-)
-
-
+    #f = open(r"/Users/goncalogomes/Documents/NOVA_IMS/2º_Semester/Computational_Inteligence/charles backup/Results10.txt", "a")
+    #f.write(f"\n")
+    #for d in fitnesses:
+        #f.write(f"{d}")
+        #f.write(' ')
+    #f.close()

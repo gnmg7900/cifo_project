@@ -20,6 +20,7 @@ def single_point_co(p1, p2):
 
 
 def cycle_co(p1, p2):
+    # This crossover algorithm doesn't work in this bioavailability problem!
     """Implementation of cycle crossover.
 
     Args:
@@ -58,6 +59,7 @@ def cycle_co(p1, p2):
 
 
 def pmx_co(p1, p2):
+    # This crossover algorithm doesn't work in this bioavailability problem!
     """Implementation of partially matched/mapped crossover.
 
     Args:
@@ -70,32 +72,27 @@ def pmx_co(p1, p2):
     co_points = sample(range(len(p1)), 2)
     co_points.sort()
 
-    # dictionary creation using the segment elements from both parents
-    # the dictionary will be working two ways
-    keys = p1[co_points[0]:co_points[1]] + p2[co_points[0]:co_points[1]]
-    values = p2[co_points[0]:co_points[1]] + p1[co_points[0]:co_points[1]]
-    # segment dictionary
-    segment = {keys[i]: values[i] for i in range(len(keys))}
+    def PMX(x, y):
+        o = [None] * len(x)
 
-    # empty offsprings
-    o1 = [None] * len(p1)
-    o2 = [None] * len(p2)
+        o[co_points[0]:co_points[1]] = x[co_points[0]:co_points[1]]
 
-    # where pmx happens
-    def pmx(o, p):
-        for i, element in enumerate(p):
-            # if element not in the segment, copy
-            if element not in segment:
-                o[i] = p[i]
-            # if element in the segment, take the value of the key from
-            # segment/dictionary
-            else:
-                o[i] = segment.get(element)
+        z = set(y[co_points[0]:co_points[1]]) - set(x[co_points[0]:co_points[1]])
+
+        for i in z:
+            temp = i
+            index = y.index(x[y.index(temp)])
+            while o[index] is not None:
+                temp = index
+                index = y.index(x[temp])
+            o[index] = i
+
+        while None in o:
+            index = o.index(None)
+            o[index] = y[index]
         return o
 
-    # repeat the procedure for each offspring
-    o1 = pmx(o1, p1)
-    o2 = pmx(o2, p2)
+    o1, o2 = PMX(p1, p2), PMX(p2, p1)
     return o1, o2
 
 # Arithmetic crossover operator linearly combines the two parent chromosomes
@@ -124,7 +121,8 @@ def arithmetic_co(p1, p2):
 
 
 if __name__ == '__main__':
-    p1, p2 = [0.07, 0.07, 0.08, 0.08, 0.01, 0.07, 0.05, 0.02, 0.08, 0.01], [0.02, 0.08, 0.07, 0.09, 0.08, 0.1, 0.05, 0.03, 0.1, 0.01]
+    p1, p2 = [2, 7, 4, 3, 1, 5, 6, 9, 8], [1, 2, 3, 4, 5, 6, 7, 8, 9]
     #p1, p2 = [1, 2, 3, 4, 5, 6, 7, 8, 9], [9, 3, 7, 8, 2, 6, 5, 1, 4]
     #p1, p2 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], [0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3]
-    o1, o2 = arithmetic_co(p1, p2)
+    o1, o2 = cycle_co(p1, p2)
+    print(o1, o2)

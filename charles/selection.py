@@ -26,14 +26,24 @@ def fps(population):
                 return individual
 
     elif population.optim == "max":
-        raise NotImplementedError
+        # Our bioavailability problem is a minimization problem!
+        # Sum total fitness
+        total_fitness = sum([i.fitness for i in population])
+        # Get a 'position' on the wheel
+        spin = uniform(0, total_fitness)
+        position = 0
+        # Find individual in the position of the spin
+        for individual in population:
+            position += individual.fitness
+            if position > spin:
+                return individual
 
     else:
-        raise Exception("No optimization specified (min).")
+        raise Exception("No optimization specified.")
 
 
 
-def tournament(population, size=20):
+def tournament(population, size=50):
     """Tournament selection implementation.
 
     Args:
@@ -51,14 +61,14 @@ def tournament(population, size=20):
         return min(tournament, key=attrgetter("fitness"))
 
     elif population.optim == "max":
-        raise NotImplementedError
-
+        # Our bioavailability problem is a minimization problem!
+        return max(tournament, key=attrgetter("fitness"))
     else:
-        raise Exception("No optimization specified (min).")
+        raise Exception("No optimization specified.")
 
 # Falta escrever o ranking
 
-def ranking(population, size = 10):
+def ranking(population):
     """ Ranking selection Implementation
 
     Args:
@@ -70,34 +80,42 @@ def ranking(population, size = 10):
     """
     if population.optim == "min":
         # sorting the fitnesses
-        sorted_fitnesses = [i.fitness for i in population].sort(reverse = True)
+        sorted_fitnesses = sorted(population, key=attrgetter("fitness"), reverse = True)
         # Total fitness for the ranking algorithm
-        total_fitness = (size + 1) * size / 2
+        total_fitness = (len(population) + 1) * len(population) / 2
 
-
-        incrementer = (total_fitness / size) / total_fitness
-        ranking_scores = []
-
-        while incrementer <= 1:
-            ranking_scores.append(incrementer)
-            incrementer += (total_fitness / size) / total_fitness
-
-        ranking_scores = np.round(ranking_scores, 2).tolist()
-
+        ranking_scores = [i / total_fitness for i in range(0, len(population))]
 
         spin = uniform(0, sum(ranking_scores))
         position = 0
-        # Find individual in the position of the spin
+
+        # Find the individual in the position of the spin
         for index, rank in enumerate(ranking_scores):
             position += rank
             if position > spin:
-                return population[index]
+                return sorted_fitnesses[index]
 
     elif population.optim == "max":
-        raise NotImplementedError
+        # Our bioavailability problem is a minimization problem!
+        # sorting the fitnesses
+        sorted_fitnesses = sorted(population, key=attrgetter("fitness"), reverse=True)
+        # Total fitness for the ranking algorithm
+        total_fitness = (len(population) + 1) * len(population) / 2
+
+        ranking_scores = [i / total_fitness for i in range(0, len(population))]
+
+        spin = uniform(0, sum(ranking_scores))
+        position = 0
+
+        # Find the individual in the position of the spin
+        for index, rank in enumerate(ranking_scores):
+            position += rank
+            if position > spin:
+                return sorted_fitnesses[index]
 
     else:
-        raise Exception("No optimization specified (min).")
+        raise Exception("No optimization specified.")
+
 
 
 

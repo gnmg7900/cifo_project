@@ -42,7 +42,7 @@ def inversion_mutation(individual):
 def insertion_mutation(individual):
     mut_insert_point = sample(range(len(individual)), 2)
     mut_insert_point.sort()
-    print(f"the index mutation point is {mut_insert_point[0]} and the index insert point is {mut_insert_point[1]}")
+    #print(f"the index mutation point is {mut_insert_point[0]} and the index insert point is {mut_insert_point[1]}")
 
     aux1 = individual[mut_insert_point[0]]
     aux2 = individual[mut_insert_point[1] + 1:len(individual)]
@@ -52,7 +52,6 @@ def insertion_mutation(individual):
 
     return individual
 
-# box mutation??
 
 if __name__ == '__main__':
     test = [0.02, 0.08, 0.07, 0.09, 0.08, 0.1, 0.05, 0.03, 0.1, 0.01]
