@@ -100,3 +100,24 @@ plt.ylabel("Fitness")
 plt.legend()
 plt.title("Best Models")
 plt.show()
+
+# all models plot
+
+plt.plot(x, results1, label = "Fps/Single_Point/Swap")
+plt.plot(x, results2, label = "Fps/Arithmetic/Swap")
+plt.plot(x, results5, label = "Fps/Single_Point/Inversion")
+plt.plot(x, results6, label = "Fps/Arithmetic/Inversion")
+plt.plot(x, results3, label = "Tournament/Single_Point/Swap")
+plt.plot(x, results4, label = "Tournament/Arithmetic/Swap")
+plt.plot(x, results7, label = "Tournament/Single_Point/Inversion")
+plt.plot(x, results8, label = "Tournament/Arithmetic/Inversion")
+plt.plot(x, results9, label = "Ranking/Single_Point/Swap")
+plt.plot(x, results10, label = "RankingArithmetic/Swap")
+plt.xlim((1))
+plt.xlabel("Generations")
+plt.ylabel("Fitness")
+plt.legend()
+plt.title("All models")
+plt.show()
+
+
