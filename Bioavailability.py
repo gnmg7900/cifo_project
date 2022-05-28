@@ -10,9 +10,7 @@ import numpy as np
 import math
 from sklearn.metrics import mean_squared_error
 
-
-
-# inputs is the matrix moleculars (X1,X2,.... X241)
+# Defining the fitness function
 
 def get_fitness(self):
     """A simple objective function to calculate RMSE
@@ -58,6 +56,8 @@ for i in range(5):
         mu_p=0.2,
         elitism=True
     )
+
+    # Appending the results to txt files in order to plot them later
 
     #fitnesses=[]
     #[fitnesses.append(pop.fitness_list[i].fitness) for i in range(100)]
