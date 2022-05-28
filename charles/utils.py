@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 
-results_path = "https://raw.githubusercontent.com/gnmg7900/cifo_project/main/Results/"
+results_path = "/Users/goncalogomes/Documents/NOVA_IMS/2º_Semester/Computational_Inteligence/cifo_project/Results/"
 
 text1 = np.loadtxt(results_path + "Results1.txt", dtype= float)
 df1 = pd.DataFrame(text1)
