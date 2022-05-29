@@ -49,8 +49,8 @@ for i in range(5):
 
     pop.evolve(
         gens=100,
-        select=ranking,
-        crossover=arithmetic_co,
+        select=tournament,
+        crossover=single_point_co,
         mutate=swap_mutation,
         co_p=0.8,
         mu_p=0.2,
