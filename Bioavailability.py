@@ -20,13 +20,12 @@ def get_fitness(self):
     """
     predict_values=[]      # Create an empty list
     for i in range(len(inputs)):
-        # Em cada iteração multiplicar de Beta1 até BetaN element wise com a primeira row de inputs
-        # e posteriormente adicionar o beta0
+        # In each iteration, multiply from Beta1 until BetaN element wise with the first input row
+        # and after that append Beta0
 
         temp = np.sum(np.multiply(self.representation[1:], inputs[i])) + self.representation[0]
-        predict_values.append(temp)  # Adicionar à lista de predicted values
-
-    # RMSE usando Sklearn dos valores predicted vs actual (target), e round it para 2 casas decimais
+        predict_values.append(temp)  # Append to the predicted values list
+    # RMSE using SKlearn from the predicted values vs the actual (target), and round it to 2 decimal cases
     rmse = round(math.sqrt(mean_squared_error(target,predict_values)),2)
 
     return rmse
@@ -36,26 +35,26 @@ def get_fitness(self):
 Individual.get_fitness = get_fitness
 
 # statistical testing (5 runs)
-for i in range(5):
+#for i in range(5):
 
-    pop = Population(
-        size=100,
-        sol_size=(len(inputs[0])+1),
-        valid_set = np.round(np.arange(0, 0.1, 0.001).tolist(), 3),
-        replacement=True,
-        optim="min",
-    )
+pop = Population(
+    size=100,
+    sol_size=(len(inputs[0])+1),
+    valid_set = np.round(np.arange(0, 0.1, 0.001).tolist(), 3),
+    replacement=True,
+    optim="min",
+)
 
 
-    pop.evolve(
-        gens=100,
-        select=tournament,
-        crossover=single_point_co,
-        mutate=swap_mutation,
-        co_p=0.8,
-        mu_p=0.2,
-        elitism=True
-    )
+pop.evolve(
+    gens=100,
+    select=tournament,
+    crossover=single_point_co,
+    mutate=swap_mutation,
+    co_p=0.8,
+    mu_p=0.2,
+    elitism=True
+)
 
     # Appending the results to txt files in order to plot them later
 

@@ -21,6 +21,7 @@ def fps(population):
         position = 0
         # Find individual in the position of the spin
         for individual in population:
+            #using the inverse of the fitness as discussed in the report
             position += (1/individual.fitness)
             if position > spin:
                 return individual
@@ -40,7 +41,6 @@ def fps(population):
 
     else:
         raise Exception("No optimization specified.")
-
 
 
 def tournament(population, size=50):
@@ -65,8 +65,6 @@ def tournament(population, size=50):
         return max(tournament, key=attrgetter("fitness"))
     else:
         raise Exception("No optimization specified.")
-
-# Falta escrever o ranking
 
 def ranking(population):
     """ Ranking selection Implementation
